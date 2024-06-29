@@ -17,8 +17,9 @@ public class Notification {
 
     private Timestamp sendTime;
 
+
     @ManyToOne
-    @JoinColumn(name = "customer_id")
+    @JoinColumn(name = "customer_id_fk")
     private Customer customer;
 
 }
