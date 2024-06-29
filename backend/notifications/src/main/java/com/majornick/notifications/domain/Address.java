@@ -2,10 +2,18 @@ package com.majornick.notifications.domain;
 
 import com.majornick.notifications.domain.enums.AddressType;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.LocalDateTime;
 
 @Entity
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
 public class Address {
     @Id
     @GeneratedValue
@@ -16,6 +24,6 @@ public class Address {
     private LocalDateTime updateDate;
 
     @ManyToOne
-    @JoinColumn(name = "customer_id_fk")
+    @JoinColumn(name = "customer_id")
     private Customer customer;
 }

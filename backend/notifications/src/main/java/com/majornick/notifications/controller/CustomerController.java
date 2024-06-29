@@ -25,4 +25,12 @@ public class CustomerController {
     public ResponseEntity<?> getCustomerById(@RequestBody @Valid CustomerDTO customerDTO){
         return ResponseEntity.ok(customerService.save(customerDTO));
     }
+
+    @PutMapping
+    public ResponseEntity<?> updateCustomer(
+            @RequestBody @Valid CustomerDTO customerDTO
+    ) {
+        customerService.updateCustomer(customerDTO);
+        return ResponseEntity.accepted().build();
+    }
 }
