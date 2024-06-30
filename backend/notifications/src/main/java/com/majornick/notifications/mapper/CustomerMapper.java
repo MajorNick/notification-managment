@@ -11,7 +11,6 @@ import org.springframework.stereotype.Component;
 public class CustomerMapper {
     private final ModelMapper modelMapper;
 
-
     public Customer toCustomer(CustomerDTO customerDTO){
         return modelMapper.map(customerDTO,Customer.class);
     }

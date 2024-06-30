@@ -2,9 +2,14 @@ package com.majornick.notifications.service;
 
 import com.majornick.notifications.domain.Address;
 import com.majornick.notifications.domain.Customer;
+import com.majornick.notifications.domain.NotificationPreference;
+import com.majornick.notifications.domain.enums.NotificationType;
+import com.majornick.notifications.dto.AddressDTO;
 import com.majornick.notifications.dto.CustomerDTO;
 import com.majornick.notifications.exception.CustomerNotFoundException;
+import com.majornick.notifications.mapper.AddressMapper;
 import com.majornick.notifications.mapper.CustomerMapper;
+import com.majornick.notifications.repository.AddressRepo;
 import com.majornick.notifications.repository.CustomerRepo;
 import io.micrometer.common.util.StringUtils;
 import jakarta.transaction.Transactional;
@@ -20,6 +25,8 @@ public class CustomerService {
 
     private final CustomerRepo customerRepo;
     private final CustomerMapper customerMapper;
+    private final AddressMapper addressMapper;
+    private final AddressRepo addressRepo;
 
     public List<CustomerDTO> getAllCustomer() {
         return customerRepo
@@ -69,5 +76,33 @@ public class CustomerService {
         }
     }
 
+    public void deleteCustomer(Long customerId) {
+        customerRepo.deleteById(customerId);
+    }
 
+    @Transactional
+    public AddressDTO addAddressToCustomer(Long customerId, AddressDTO addressDTO) {
+        Customer customer = customerRepo.findById(customerId)
+                .orElseThrow(() -> new CustomerNotFoundException(
+                        String.format("Cannot add address to customer,  customer  with the id: %d not Found", customerId)
+                ));
+        Address address = addressMapper.toAddress(addressDTO);
+        address.setCustomer(customer);
+        return addressMapper.toDto(addressRepo.save(address));
+    }
+
+    @Transactional
+    public void createPreference(Long customerId, NotificationType type) {
+        Customer customer = customerRepo.findById(customerId)
+                .orElseThrow(() -> new CustomerNotFoundException(
+                        String.format("Cannot add address to customer,  customer  with the id: %d not Found", customerId)
+                ));
+        for (var notificationPreference : customer.getNotificationPreferenceHistory()) {
+            if (notificationPreference.getActive()) {
+                notificationPreference.setActive(false);
+                break;
+            }
+        }
+        NotificationPreference.builder().notificationType(type).active(true).build();
+    }
 }
