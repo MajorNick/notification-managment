@@ -11,6 +11,7 @@ import com.majornick.notifications.mapper.AddressMapper;
 import com.majornick.notifications.mapper.CustomerMapper;
 import com.majornick.notifications.repository.AddressRepo;
 import com.majornick.notifications.repository.CustomerRepo;
+import com.majornick.notifications.repository.NotificationPreferenceRepo;
 import io.micrometer.common.util.StringUtils;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
@@ -27,6 +28,7 @@ public class CustomerService {
     private final CustomerMapper customerMapper;
     private final AddressMapper addressMapper;
     private final AddressRepo addressRepo;
+    private final NotificationPreferenceRepo notificationPreferenceRepo;
 
     public List<CustomerDTO> getAllCustomer() {
         return customerRepo
@@ -95,14 +97,20 @@ public class CustomerService {
     public void createPreference(Long customerId, NotificationType type) {
         Customer customer = customerRepo.findById(customerId)
                 .orElseThrow(() -> new CustomerNotFoundException(
-                        String.format("Cannot add address to customer,  customer  with the id: %d not Found", customerId)
+                        String.format("Cannot add Notification preference to customer,  customer  with the id: %d not Found", customerId)
                 ));
         for (var notificationPreference : customer.getNotificationPreferenceHistory()) {
             if (notificationPreference.getActive()) {
                 notificationPreference.setActive(false);
-                break;
             }
         }
-        NotificationPreference.builder().notificationType(type).active(true).build();
+        notificationPreferenceRepo.save(NotificationPreference
+                .builder()
+                .customer(customer)
+                .notificationType(type)
+                .active(true)
+                .build()
+        );
+
     }
 }
