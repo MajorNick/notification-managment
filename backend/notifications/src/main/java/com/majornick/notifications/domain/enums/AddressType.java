@@ -4,5 +4,4 @@ public enum AddressType {
     EMAIL,
     NUMBER,
     POSTAL,
-
 }

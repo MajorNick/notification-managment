@@ -1,3 +1,4 @@
+/*
 package com.majornick.notifications.service;
 
 import com.majornick.notifications.domain.User;
@@ -8,7 +9,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-@Service
+//@Service
 @RequiredArgsConstructor
 public class UserDetailServiceImpl implements UserDetailsService {
     private final UserRepo userRepo;
@@ -24,3 +25,4 @@ public class UserDetailServiceImpl implements UserDetailsService {
                 .build();
     }
 }
+*/

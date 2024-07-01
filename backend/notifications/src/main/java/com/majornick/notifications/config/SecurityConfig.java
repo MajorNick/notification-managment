@@ -1,3 +1,4 @@
+/*
 package com.majornick.notifications.config;
 
 import com.majornick.notifications.service.UserDetailServiceImpl;
@@ -16,38 +17,42 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
-@Configuration
+*/
+/*@Configuration
 @EnableWebSecurity
-@EnableMethodSecurity
+@EnableMethodSecurity*//*
+
 @RequiredArgsConstructor
 public class SecurityConfig {
 
     private final UserDetailServiceImpl userDetailService;
 
-    @Bean
+  //  @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(registry -> {
-                    registry.requestMatchers("/api/**").hasAnyRole("ADMIN", "SUPER_ADMIN");
-                    registry.requestMatchers("/api/admin/**").hasRole("SUPER_ADMIN");
-
-
+                    //registry.requestMatchers("/api/**").hasAnyRole("ADMIN", "SUPER_ADMIN");
+                    registry.requestMatchers("/api/admin/login").permitAll();
                     registry.anyRequest().authenticated();
                 }).formLogin(AbstractAuthenticationFilterConfigurer::permitAll).build();
     }
 
-    @Bean
+  //  @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
+*/
+/*
     @Bean
     public UserDetailsService userDetailsService() {
         return userDetailService;
     }
+*//*
 
-    @Bean
+
+   // @Bean
     public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider dao = new DaoAuthenticationProvider();
         dao.setUserDetailsService(userDetailService);
@@ -55,3 +60,4 @@ public class SecurityConfig {
         return dao;
     }
 }
+*/

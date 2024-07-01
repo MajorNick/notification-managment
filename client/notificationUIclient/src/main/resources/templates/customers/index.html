@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout}">
+<head>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/customers/main.css}"/>
+    <title>Customers</title>
+</head>
+<body>
+<main layout:fragment="content">
+    <h1>Customer List</h1>
+    <table>
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Mobile Phone</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="customer : ${customers}">
+            <td th:text="${customer.getFullName()}"></td>
+            <td th:text="${customer.getEmail()}"></td>
+            <td th:text="${customer.getMobilePhone()}"></td>
+            <td>
+                <a th:href="@{/customers/{id}(id=${customer.getId()})}">View</a>
+                <a th:href="@{/customers/{id}/edit(id=${customer.getId()})}">Edit</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</main>
+</body>
+</html>

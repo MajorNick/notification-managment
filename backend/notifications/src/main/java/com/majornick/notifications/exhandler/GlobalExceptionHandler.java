@@ -1,10 +1,12 @@
 package com.majornick.notifications.exhandler;
 
 import com.majornick.notifications.exception.CustomerNotFoundException;
+import com.majornick.notifications.exception.EmptyLoginAttemptException;
+import com.majornick.notifications.exception.InvalidLoginAttemptException;
 import com.majornick.notifications.exception.UsernameAlreadyExistsException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
+//import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -15,15 +17,15 @@ import java.util.Map;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
-    @ExceptionHandler({CustomerNotFoundException.class, UsernameNotFoundException.class})
-    public ResponseEntity<String> handle(RuntimeException exp) {
+    @ExceptionHandler({CustomerNotFoundException.class,/* UsernameNotFoundException.class*/})
+    public ResponseEntity<String> handleNotFound(RuntimeException exp) {
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
                 .body(exp.getMessage());
     }
 
-    @ExceptionHandler({UsernameAlreadyExistsException.class})
-    public ResponseEntity<String> handle(UsernameAlreadyExistsException exp) {
+    @ExceptionHandler({UsernameAlreadyExistsException.class, EmptyLoginAttemptException.class, InvalidLoginAttemptException.class})
+    public ResponseEntity<String> handleBadRequest(RuntimeException exp) {
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(exp.getMessage());

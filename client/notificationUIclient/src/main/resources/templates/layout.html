@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title layout:title-pattern="$CONTENT_TITLE - Your App Name">Your App Name</title>
+    <link rel="stylesheet" th:href="@{/css/main.css}">
+</head>
+<body>
+<header>
+    <!-- Add your header content here -->
+</header>
+
+<nav>
+    <!-- Add your navigation menu here -->
+</nav>
+
+<main layout:fragment="content">
+    <!-- This is where page-specific content will be inserted -->
+</main>
+
+<footer>
+    <!-- Add your footer content here -->
+</footer>
+
+<script th:src="@{/js/customers/main.js}"></script>
+</body>
+</html>
