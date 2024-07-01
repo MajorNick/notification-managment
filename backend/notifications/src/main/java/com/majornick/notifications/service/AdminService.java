@@ -2,6 +2,7 @@ package com.majornick.notifications.service;
 
 import com.majornick.notifications.domain.User;
 import com.majornick.notifications.dto.UserDTO;
+import com.majornick.notifications.exception.UsernameAlreadyExistsException;
 import com.majornick.notifications.repository.UserRepo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -16,7 +17,7 @@ public class AdminService {
 
     public void registerAdmin(UserDTO userDTO) {
         if (userRepo.existsByUsername(userDTO.getUsername())) {
-            throw new RuntimeException(String.format("User with username %s, already exists", userDTO.getUsername()));
+            throw new UsernameAlreadyExistsException(String.format("User with username %s, already exists", userDTO.getUsername()));
         }
         userRepo.save(User.builder()
                 .role("ADMIN")
