@@ -1,5 +1,6 @@
 package com.majornick.notifications.domain;
 
+import com.majornick.notifications.domain.enums.NotificationType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -24,8 +25,8 @@ public class Customer {
     private String email;
     private String mobilePhone;
 
-    @OneToMany(mappedBy = "customer")
-    private List<NotificationPreference> notificationPreferenceHistory;
+    @Enumerated(EnumType.STRING)
+    private NotificationType notificationType;
 
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
     private List<Address> addresses;

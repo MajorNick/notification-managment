@@ -2,16 +2,18 @@ package com.majornick.notifications.service;
 
 import com.majornick.notifications.domain.Address;
 import com.majornick.notifications.domain.Customer;
-import com.majornick.notifications.domain.NotificationPreference;
+import com.majornick.notifications.domain.Notification;
 import com.majornick.notifications.domain.enums.NotificationType;
 import com.majornick.notifications.dto.AddressDTO;
 import com.majornick.notifications.dto.CustomerDTO;
+import com.majornick.notifications.dto.NotificationDTO;
 import com.majornick.notifications.exception.CustomerNotFoundException;
 import com.majornick.notifications.mapper.AddressMapper;
 import com.majornick.notifications.mapper.CustomerMapper;
+import com.majornick.notifications.mapper.NotificationMapper;
 import com.majornick.notifications.repository.AddressRepo;
 import com.majornick.notifications.repository.CustomerRepo;
-import com.majornick.notifications.repository.NotificationPreferenceRepo;
+import com.majornick.notifications.repository.NotificationRepo;
 import io.micrometer.common.util.StringUtils;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
@@ -28,7 +30,8 @@ public class CustomerService {
     private final CustomerMapper customerMapper;
     private final AddressMapper addressMapper;
     private final AddressRepo addressRepo;
-    private final NotificationPreferenceRepo notificationPreferenceRepo;
+    private final NotificationMapper notificationMapper;
+    private final NotificationRepo notificationRepo;
 
     public List<CustomerDTO> getAllCustomer() {
         return customerRepo
@@ -94,23 +97,22 @@ public class CustomerService {
     }
 
     @Transactional
-    public void createPreference(Long customerId, NotificationType type) {
+    public void switchPreference(Long customerId, NotificationType type) {
         Customer customer = customerRepo.findById(customerId)
                 .orElseThrow(() -> new CustomerNotFoundException(
                         String.format("Cannot add Notification preference to customer,  customer  with the id: %d not Found", customerId)
                 ));
-        for (var notificationPreference : customer.getNotificationPreferenceHistory()) {
-            if (notificationPreference.getActive()) {
-                notificationPreference.setActive(false);
-            }
-        }
-        notificationPreferenceRepo.save(NotificationPreference
-                .builder()
-                .customer(customer)
-                .notificationType(type)
-                .active(true)
-                .build()
-        );
+        customer.setNotificationType(type);
+    }
 
+    @Transactional
+    public NotificationDTO assignNotificationToCustomer(Long customerId, NotificationDTO notificationDTO) {
+        Customer customer = customerRepo.findById(customerId)
+                .orElseThrow(() -> new CustomerNotFoundException(
+                        String.format("Cannot assign Notification  to customer,  customer  with the id: %d not Found", customerId)
+                ));
+        Notification notification = notificationMapper.toNotification(notificationDTO);
+        notification.setCustomer(customer);
+        return notificationMapper.toDto(notificationRepo.save(notification));
     }
 }

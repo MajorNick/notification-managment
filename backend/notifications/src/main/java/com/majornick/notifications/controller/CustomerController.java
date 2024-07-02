@@ -3,6 +3,7 @@ package com.majornick.notifications.controller;
 import com.majornick.notifications.domain.enums.NotificationType;
 import com.majornick.notifications.dto.AddressDTO;
 import com.majornick.notifications.dto.CustomerDTO;
+import com.majornick.notifications.dto.NotificationDTO;
 import com.majornick.notifications.service.CustomerService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -60,9 +61,14 @@ public class CustomerController {
     }
 
     @PostMapping("/{customerId}/preferences")
-    public ResponseEntity<?> createPreference(@PathVariable Long customerId, @RequestParam("NotificationType") NotificationType type) {
-        customerService.createPreference(customerId, type);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+    public ResponseEntity<?> switchPreference(@PathVariable Long customerId, @RequestParam("NotificationType") NotificationType type) {
+        customerService.switchPreference(customerId, type);
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/{customerId}/notifications")
+    public ResponseEntity<?> assignNotification(@PathVariable Long customerId, NotificationDTO notificationDTO) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(customerService.assignNotificationToCustomer(customerId, notificationDTO));
     }
 
 }

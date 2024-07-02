@@ -4,10 +4,14 @@
       layout:decorate="~{layout}">
 <head>
     <link rel="stylesheet" type="text/css" th:href="@{/css/customers/main.css}"/>
+    <link rel="canonical" href="https://getbootstrap.com/docs/4.0/examples/starter-template/">
+
+    <link href="https://getbootstrap.com/docs/4.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <title>Customers</title>
 </head>
 <body>
 <main layout:fragment="content">
+    <div th:replace="navbar :: navbar"></div>
     <h1>Customer List</h1>
     <table>
         <thead>

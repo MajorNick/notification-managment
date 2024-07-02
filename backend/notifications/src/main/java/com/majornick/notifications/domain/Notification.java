@@ -2,11 +2,20 @@ package com.majornick.notifications.domain;
 
 import com.majornick.notifications.domain.enums.Status;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 
 @Entity
 @SequenceGenerator(name = "notification_seq")
+@AllArgsConstructor
+@NoArgsConstructor
+@Getter
+@Setter
 public class Notification {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "notification_seq")
@@ -15,7 +24,8 @@ public class Notification {
     @Enumerated(EnumType.STRING)
     private Status status;
 
-    private Timestamp sendTime;
+    private String content;
+    private LocalDateTime sendTime;
 
 
     @ManyToOne

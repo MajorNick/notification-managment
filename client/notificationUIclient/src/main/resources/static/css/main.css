@@ -1,10 +1,11 @@
 body {
+    padding-top: 5rem;
     font-family: Arial, sans-serif;
     line-height: 1.6;
+    background-color: #f0f0f0;
     margin: 0;
-    padding: 0;
 }
-
-header, nav, main, footer {
-    padding: 1rem;
+.starter-template {
+    padding: 3rem 1.5rem;
+    text-align: center;
 }
