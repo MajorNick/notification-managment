@@ -1,7 +1,5 @@
-/*
 package com.majornick.notifications.config;
 
-import com.majornick.notifications.service.UserDetailServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,52 +10,38 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractAuthenticationFilterConfigurer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-*/
-/*@Configuration
+@Configuration
 @EnableWebSecurity
-@EnableMethodSecurity*//*
-
+@EnableMethodSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
 
-    private final UserDetailServiceImpl userDetailService;
-
-  //  @Bean
+    private final JWTAuthenticationFilter jwtAuthFilter;
+    private final AuthenticationProvider authenticationProvider;
+    @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
+                .sessionManagement(sessionManagement -> sessionManagement
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(registry -> {
-                    //registry.requestMatchers("/api/**").hasAnyRole("ADMIN", "SUPER_ADMIN");
-                    registry.requestMatchers("/api/admin/login").permitAll();
+                    registry.requestMatchers("/api/auth/login").permitAll();
                     registry.anyRequest().authenticated();
-                }).formLogin(AbstractAuthenticationFilterConfigurer::permitAll).build();
+                })
+                .authenticationProvider(authenticationProvider)
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+                .formLogin(AbstractAuthenticationFilterConfigurer::permitAll)
+                .build();
     }
 
-  //  @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
-
-*/
-/*
-    @Bean
-    public UserDetailsService userDetailsService() {
-        return userDetailService;
-    }
-*//*
 
 
-   // @Bean
-    public AuthenticationProvider authenticationProvider() {
-        DaoAuthenticationProvider dao = new DaoAuthenticationProvider();
-        dao.setUserDetailsService(userDetailService);
-        dao.setPasswordEncoder(passwordEncoder());
-        return dao;
-    }
+
 }
-*/

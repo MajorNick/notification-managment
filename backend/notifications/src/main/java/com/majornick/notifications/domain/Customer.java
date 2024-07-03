@@ -26,7 +26,7 @@ public class Customer {
     private String mobilePhone;
 
     @Enumerated(EnumType.STRING)
-    private NotificationType notificationType;
+    private NotificationType prefferedNotificationType;
 
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
     private List<Address> addresses;

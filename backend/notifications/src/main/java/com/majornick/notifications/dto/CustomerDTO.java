@@ -1,5 +1,6 @@
 package com.majornick.notifications.dto;
 
+import com.majornick.notifications.domain.enums.NotificationType;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
@@ -16,5 +17,6 @@ public class CustomerDTO {
     @Email
     private String email;
     private String mobilePhone;
+    private NotificationType prefferedNotificationType;
     private List<AddressDTO> addresses;
 }

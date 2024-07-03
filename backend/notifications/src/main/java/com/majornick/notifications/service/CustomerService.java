@@ -102,7 +102,7 @@ public class CustomerService {
                 .orElseThrow(() -> new CustomerNotFoundException(
                         String.format("Cannot add Notification preference to customer,  customer  with the id: %d not Found", customerId)
                 ));
-        customer.setNotificationType(type);
+        customer.setPrefferedNotificationType(type);
     }
 
     @Transactional

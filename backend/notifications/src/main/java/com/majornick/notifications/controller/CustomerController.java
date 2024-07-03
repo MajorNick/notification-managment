@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/customers")
 @RequiredArgsConstructor
-//@PreAuthorize("hasAnyRole('ADMIN','SUPER_ADMIN')")
 public class CustomerController {
     private final CustomerService customerService;
 
