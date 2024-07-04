@@ -17,6 +17,6 @@ public class CustomerDTO {
     @Email
     private String email;
     private String mobilePhone;
-    private NotificationType prefferedNotificationType;
+    private NotificationType preferredNotificationType;
     private List<AddressDTO> addresses;
 }

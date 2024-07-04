@@ -4,9 +4,9 @@ import com.majornick.notifications.exception.CustomerNotFoundException;
 import com.majornick.notifications.exception.EmptyLoginAttemptException;
 import com.majornick.notifications.exception.InvalidLoginAttemptException;
 import com.majornick.notifications.exception.UsernameAlreadyExistsException;
+import io.jsonwebtoken.ExpiredJwtException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-//import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -25,10 +25,19 @@ public class GlobalExceptionHandler {
                 .body(exp.getMessage());
     }
 
-    @ExceptionHandler({AuthenticationException.class,UsernameAlreadyExistsException.class, EmptyLoginAttemptException.class, InvalidLoginAttemptException.class})
+    @ExceptionHandler({AuthenticationException.class
+            ,UsernameAlreadyExistsException.class
+            ,EmptyLoginAttemptException.class
+            ,InvalidLoginAttemptException.class})
     public ResponseEntity<String> handleBadRequest(RuntimeException exp) {
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
+                .body(exp.getMessage());
+    }
+    @ExceptionHandler(ExpiredJwtException.class)
+    public ResponseEntity<String> handleExpiredToken(RuntimeException exp) {
+        return ResponseEntity
+                .status(HttpStatus.FORBIDDEN)
                 .body(exp.getMessage());
     }
 

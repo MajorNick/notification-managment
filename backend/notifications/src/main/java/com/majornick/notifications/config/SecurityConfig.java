@@ -32,16 +32,14 @@ public class SecurityConfig {
                 .sessionManagement(sessionManagement -> sessionManagement
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(registry -> {
-                    registry.requestMatchers("/api/auth/login").permitAll();
+                    registry.requestMatchers("/api/auth/authenticate").permitAll();
+                    registry.requestMatchers("/swagger-ui/**").permitAll();
+                    registry.requestMatchers("/v3/api-docs/**").permitAll();
                     registry.anyRequest().authenticated();
                 })
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
-                .formLogin(AbstractAuthenticationFilterConfigurer::permitAll)
                 .build();
     }
-
-
-
 
 }

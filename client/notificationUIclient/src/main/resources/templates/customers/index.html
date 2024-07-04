@@ -19,7 +19,8 @@
             <th>Name</th>
             <th>Email</th>
             <th>Mobile Phone</th>
-            <th>Actions</th>
+            <th>Preferred Notification Type</th>
+            <th></th>
         </tr>
         </thead>
         <tbody>
@@ -27,6 +28,7 @@
             <td th:text="${customer.getFullName()}"></td>
             <td th:text="${customer.getEmail()}"></td>
             <td th:text="${customer.getMobilePhone()}"></td>
+            <td th:text="${customer.getPreferredNotificationType()}"></td>
             <td>
                 <a th:href="@{/customers/{id}(id=${customer.getId()})}">View</a>
                 <a th:href="@{/customers/{id}/edit(id=${customer.getId()})}">Edit</a>
