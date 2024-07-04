@@ -31,10 +31,16 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
             return;
         }
         String jwt = authHeader.substring("Bearer ".length());
+        if(jwtService.isTokenExpired(jwt)){
+            filterChain.doFilter(request,response);
+            return;
+        }
         String username = jwtService.extractUsername(jwt);
         if(username!= null && SecurityContextHolder.getContext().getAuthentication()==null){
+
             UserDetails userDetails = userDetailsService.loadUserByUsername(username);
             if(jwtService.isTokenValid(jwt,userDetails)){
+
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                         userDetails,
                         null
@@ -42,8 +48,13 @@ public class JWTAuthenticationFilter extends OncePerRequestFilter {
                 );
                 authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                 SecurityContextHolder.getContext().setAuthentication(authToken);
+                filterChain.doFilter(request,response);
+            }else{
+                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                response.getWriter().write("Token expired");
             }
         }else{
+
             filterChain.doFilter(request,response);
         }
     }

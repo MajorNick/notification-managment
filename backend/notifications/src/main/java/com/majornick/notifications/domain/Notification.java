@@ -7,7 +7,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 @Entity
@@ -18,7 +17,7 @@ import java.time.LocalDateTime;
 @Setter
 public class Notification {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "notification_seq")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "notification_seq")
     private Long id;
 
     @Enumerated(EnumType.STRING)

@@ -1,20 +1,17 @@
 package com.majornick.notifications.client.dto;
 
-
-import lombok.Data;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.util.List;
 
 @Getter
 @Setter
-@Data
-public class CustomerDTO {
-    private Long id;
+@AllArgsConstructor
+@NoArgsConstructor
+public class SearchDTO {
     private String fullName;
     private String email;
     private String phoneNumber;
     private String preferredNotificationType;
-    private List<AddressDTO> addresses;
 }

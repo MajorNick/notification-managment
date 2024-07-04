@@ -34,7 +34,7 @@ public class NotificationService {
         notif.setStatus(status);
     }
 
-    public Map<String,Long> getNotificationStatusReport(){
+    public Map<String, Long> getNotificationStatusReport() {
         var list = notificationRepo.countNotificationsByStatus();
         Map<String, Long> countMap = new HashMap<>();
         list.forEach(arr -> {

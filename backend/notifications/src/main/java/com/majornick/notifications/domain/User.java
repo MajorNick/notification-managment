@@ -11,6 +11,7 @@ import java.util.List;
 
 @Entity
 @Table(name = "user_table")
+@SequenceGenerator(name = "user_seq")
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -18,7 +19,7 @@ import java.util.List;
 @Builder
 public class User implements UserDetails {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE,generator ="user_seq" )
     private Long id;
     private String username;
     private String password;

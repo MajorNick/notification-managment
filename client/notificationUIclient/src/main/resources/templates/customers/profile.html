@@ -18,7 +18,7 @@
   <div>
     <h2 th:text="${customer.getFullName()}"></h2>
     <p><strong>Email:</strong> <span th:text="${customer.getEmail()}"></span></p>
-    <p><strong>Mobile Phone:</strong> <span th:text="${customer.getMobilePhone()}"></span></p>
+    <p><strong>Mobile Phone:</strong> <span th:text="${customer.getPhoneNumber()}"></span></p>
   </div>
   <form th:action="@{/customers/{id}/delete(id=${customer.id})}"  method="post">
     <button class="button-6" role="button">Delete Profile</button>
@@ -29,14 +29,12 @@
     <tr>
       <th>Address Type</th>
       <th>Address Value</th>
-      <th>Update Date</th>
     </tr>
     </thead>
     <tbody>
     <tr th:each="address : ${customer.getAddresses()}">
       <td th:text="${address.getAddressType()}"></td>
       <td th:text="${address.getAddressValue()}"></td>
-      <td th:text="${address.getUpdateDate()}"></td>
     </tr>
     </tbody>
   </table>

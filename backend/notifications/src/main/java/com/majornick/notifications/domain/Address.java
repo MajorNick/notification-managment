@@ -7,21 +7,19 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
-
 @Entity
+@SequenceGenerator(name = "address_seq")
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
 public class Address {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "address_seq")
     private Long id;
 
     private AddressType addressType;
     private String addressValue;
-    private LocalDateTime updateDate;
 
     @ManyToOne
     @JoinColumn(name = "customer_id")

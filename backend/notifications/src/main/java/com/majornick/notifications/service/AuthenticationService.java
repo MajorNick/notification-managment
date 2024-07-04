@@ -4,8 +4,6 @@ import com.majornick.notifications.domain.User;
 import com.majornick.notifications.dto.AuthenticationRequestDTO;
 import com.majornick.notifications.dto.AuthenticationResponseDTO;
 import com.majornick.notifications.dto.UserDTO;
-import com.majornick.notifications.exception.EmptyLoginAttemptException;
-import com.majornick.notifications.exception.InvalidLoginAttemptException;
 import com.majornick.notifications.exception.UsernameAlreadyExistsException;
 import com.majornick.notifications.repository.UserRepo;
 import lombok.RequiredArgsConstructor;
@@ -13,8 +11,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -43,10 +39,10 @@ public class AuthenticationService {
 
     public AuthenticationResponseDTO authenticate(AuthenticationRequestDTO request) {
         authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(request.getUsername(),request.getPassword())
+                new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
         );
         User user = userRepo.findByUsername(request.getUsername()).orElseThrow(
-                () ->  new UsernameAlreadyExistsException(String.format("User with username %s, already exists", request.getUsername()))
+                () -> new UsernameAlreadyExistsException(String.format("User with username %s, already exists", request.getUsername()))
         );
 
         return AuthenticationResponseDTO

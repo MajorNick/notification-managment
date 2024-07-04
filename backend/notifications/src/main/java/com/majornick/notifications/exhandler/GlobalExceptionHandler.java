@@ -26,18 +26,12 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler({AuthenticationException.class
-            ,UsernameAlreadyExistsException.class
-            ,EmptyLoginAttemptException.class
-            ,InvalidLoginAttemptException.class})
+            , UsernameAlreadyExistsException.class
+            , EmptyLoginAttemptException.class
+            , InvalidLoginAttemptException.class})
     public ResponseEntity<String> handleBadRequest(RuntimeException exp) {
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
-                .body(exp.getMessage());
-    }
-    @ExceptionHandler(ExpiredJwtException.class)
-    public ResponseEntity<String> handleExpiredToken(RuntimeException exp) {
-        return ResponseEntity
-                .status(HttpStatus.FORBIDDEN)
                 .body(exp.getMessage());
     }
 
@@ -54,5 +48,13 @@ public class GlobalExceptionHandler {
         return ResponseEntity
                 .status(HttpStatus.BAD_REQUEST)
                 .body(new ErrorResponse(errors));
+    }
+
+    @ExceptionHandler(ExpiredJwtException.class)
+    public ResponseEntity<String> handleExpiredJwtToken(ExpiredJwtException exp) {
+
+        return ResponseEntity
+                .status(HttpStatus.UNAUTHORIZED)
+                .body(exp.getMessage());
     }
 }

@@ -4,6 +4,7 @@ import com.majornick.notifications.domain.enums.NotificationType;
 import com.majornick.notifications.dto.AddressDTO;
 import com.majornick.notifications.dto.CustomerDTO;
 import com.majornick.notifications.dto.NotificationDTO;
+import com.majornick.notifications.dto.SearchDTO;
 import com.majornick.notifications.service.CustomerService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -25,11 +26,13 @@ public class CustomerController {
 
     @GetMapping("/{customerId}")
     public ResponseEntity<?> getCustomerById(@PathVariable("customerId") Long customerId) {
+
         return ResponseEntity.ok(customerService.findById(customerId));
     }
 
     @PostMapping
     public ResponseEntity<?> createCustomer(@RequestBody @Valid CustomerDTO customerDTO) {
+
         return ResponseEntity.status(HttpStatus.CREATED).body(customerService.save(customerDTO));
     }
 
@@ -68,6 +71,12 @@ public class CustomerController {
     @PostMapping("/{customerId}/notifications")
     public ResponseEntity<?> assignNotification(@PathVariable Long customerId, NotificationDTO notificationDTO) {
         return ResponseEntity.status(HttpStatus.CREATED).body(customerService.assignNotificationToCustomer(customerId, notificationDTO));
+    }
+
+    @PostMapping("/search")
+    public ResponseEntity<?> searchCustomers(@RequestBody SearchDTO searchDTO) {
+
+        return ResponseEntity.ok(customerService.searchCustomers(searchDTO));
     }
 
 }

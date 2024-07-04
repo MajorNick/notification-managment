@@ -7,6 +7,7 @@ import com.majornick.notifications.domain.enums.NotificationType;
 import com.majornick.notifications.dto.AddressDTO;
 import com.majornick.notifications.dto.CustomerDTO;
 import com.majornick.notifications.dto.NotificationDTO;
+import com.majornick.notifications.dto.SearchDTO;
 import com.majornick.notifications.exception.CustomerNotFoundException;
 import com.majornick.notifications.mapper.AddressMapper;
 import com.majornick.notifications.mapper.CustomerMapper;
@@ -15,11 +16,17 @@ import com.majornick.notifications.repository.AddressRepo;
 import com.majornick.notifications.repository.CustomerRepo;
 import com.majornick.notifications.repository.NotificationRepo;
 import io.micrometer.common.util.StringUtils;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaQuery;
+import jakarta.persistence.criteria.Predicate;
+import jakarta.persistence.criteria.Root;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -32,6 +39,7 @@ public class CustomerService {
     private final AddressRepo addressRepo;
     private final NotificationMapper notificationMapper;
     private final NotificationRepo notificationRepo;
+    private final EntityManager entityManager;
 
     public List<CustomerDTO> getAllCustomer() {
         return customerRepo
@@ -73,8 +81,8 @@ public class CustomerService {
         if (StringUtils.isNotBlank(customerDTO.getFullName())) {
             customer.setFullName(customerDTO.getFullName());
         }
-        if (StringUtils.isNotBlank(customerDTO.getMobilePhone())) {
-            customer.setMobilePhone(customerDTO.getMobilePhone());
+        if (StringUtils.isNotBlank(customerDTO.getPhoneNumber())) {
+            customer.setPhoneNumber(customerDTO.getPhoneNumber());
         }
         if (StringUtils.isNotBlank(customerDTO.getEmail())) {
             customer.setEmail(customerDTO.getEmail());
@@ -102,7 +110,7 @@ public class CustomerService {
                 .orElseThrow(() -> new CustomerNotFoundException(
                         String.format("Cannot add Notification preference to customer,  customer  with the id: %d not Found", customerId)
                 ));
-        customer.setPrefferedNotificationType(type);
+        customer.setPreferredNotificationType(type);
     }
 
     @Transactional
@@ -114,5 +122,31 @@ public class CustomerService {
         Notification notification = notificationMapper.toNotification(notificationDTO);
         notification.setCustomer(customer);
         return notificationMapper.toDto(notificationRepo.save(notification));
+    }
+
+    public List<CustomerDTO> searchCustomers(SearchDTO searchDTO) {
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Customer> query = cb.createQuery(Customer.class);
+        Root<Customer> customer = query.from(Customer.class);
+        List<Predicate> predicates = new ArrayList<>();
+
+        if (StringUtils.isNotBlank(searchDTO.getFullName())) {
+            predicates.add(cb.like(cb.lower(customer.get("fullName")), "%" + searchDTO.getFullName().toLowerCase() + "%"));
+        }
+        if (StringUtils.isNotBlank(searchDTO.getEmail())) {
+            predicates.add(cb.like(cb.lower(customer.get("email")), "%" + searchDTO.getEmail().toLowerCase() + "%"));
+        }
+        if (StringUtils.isNotBlank(searchDTO.getPhoneNumber())){
+            predicates.add(cb.like(customer.get("phoneNumber"), "%" + searchDTO.getPhoneNumber() + "%"));
+        }
+        if (StringUtils.isNotBlank(searchDTO.getPreferredNotificationType())) {
+            predicates.add(cb.equal(customer.get("preferredNotificationType"), searchDTO.getPreferredNotificationType()));
+        }
+        query.where(cb.and(predicates.toArray(new Predicate[0])));
+
+        return entityManager.createQuery(query).getResultList()
+                .stream()
+                .map(customerMapper::toDTO)
+                .toList();
     }
 }

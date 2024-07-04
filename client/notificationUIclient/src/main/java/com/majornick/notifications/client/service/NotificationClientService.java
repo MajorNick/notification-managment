@@ -1,10 +1,14 @@
 package com.majornick.notifications.client.service;
 
 import com.majornick.notifications.client.dto.CustomerDTO;
+import com.majornick.notifications.client.dto.SearchDTO;
+import com.majornick.notifications.client.exceptions.UnauthorizedException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -29,8 +33,11 @@ public class NotificationClientService {
                 null,
                 responseType
         );
+        if(responseEntity.getStatusCode().isSameCodeAs(HttpStatusCode.valueOf(401))){
+            throw new UnauthorizedException("Not authorized");
+        }
         if (responseEntity.getStatusCode().isError()) {
-            throw new RuntimeException("ERROR IN SENDING REQq: " + responseEntity.getStatusCode());
+            throw new RuntimeException("ERROR IN SENDING REQUEST: " + responseEntity.getStatusCode());
         }
         return responseEntity.getBody();
     }
@@ -46,6 +53,9 @@ public class NotificationClientService {
                 null,
                 responseType
         );
+        if(responseEntity.getStatusCode().isSameCodeAs(HttpStatusCode.valueOf(401))){
+            throw new UnauthorizedException("Not authorized");
+        }
         if (responseEntity.getStatusCode().isError()) {
             throw new RuntimeException("ERROR IN SENDING REQUEST: " + responseEntity.getStatusCode());
         }
@@ -61,9 +71,48 @@ public class NotificationClientService {
                 null,
                 responseType
         );
+        if(responseEntity.getStatusCode().isSameCodeAs(HttpStatusCode.valueOf(401))){
+            throw new UnauthorizedException("Not authorized");
+        }
         if (responseEntity.getStatusCode().isError()) {
             throw new RuntimeException("ERROR IN SENDING REQUEST: " + responseEntity.getStatusCode());
         }
     }
 
+    public void saveCustomer(CustomerDTO customerDTO) {
+        ParameterizedTypeReference<CustomerDTO> responseType = new ParameterizedTypeReference<>() {
+        };
+        HttpEntity<?> requestEntity = new HttpEntity<>(customerDTO);
+        ResponseEntity<CustomerDTO> responseEntity = restTemplate.exchange(
+                String.format("%s/api/customers", notificationServiceUrl),
+                HttpMethod.POST,
+                requestEntity,
+                responseType
+        );
+        if(responseEntity.getStatusCode().isSameCodeAs(HttpStatusCode.valueOf(401))){
+            throw new UnauthorizedException("Not authorized");
+        }
+        if (responseEntity.getStatusCode().isError()) {
+            throw new RuntimeException("ERROR IN SENDING REQUEST: " + responseEntity.getStatusCode());
+        }
+    }
+
+    public List<CustomerDTO> searchCustomers(SearchDTO searchDTO) {
+        ParameterizedTypeReference<List<CustomerDTO>> responseType = new ParameterizedTypeReference<>() {
+        };
+        HttpEntity<?> requestEntity = new HttpEntity<>(searchDTO);
+        ResponseEntity<List<CustomerDTO>> responseEntity = restTemplate.exchange(
+                String.format("%s/api/customers/search", notificationServiceUrl),
+                HttpMethod.POST,
+                requestEntity,
+                responseType
+        );
+        if(responseEntity.getStatusCode().isSameCodeAs(HttpStatusCode.valueOf(401))){
+            throw new UnauthorizedException("Not authorized");
+        }
+        if (responseEntity.getStatusCode().isError()) {
+            throw new RuntimeException("ERROR IN SENDING REQUEST: " + responseEntity.getStatusCode());
+        }
+        return responseEntity.getBody();
+    }
 }

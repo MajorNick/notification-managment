@@ -17,16 +17,16 @@ import java.util.List;
 @Setter
 public class Customer {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE,generator = "customer_seq")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "customer_seq")
     private Long id;
 
     private String fullName;
 
     private String email;
-    private String mobilePhone;
+    private String phoneNumber;
 
     @Enumerated(EnumType.STRING)
-    private NotificationType prefferedNotificationType;
+    private NotificationType preferredNotificationType;
 
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
     private List<Address> addresses;
