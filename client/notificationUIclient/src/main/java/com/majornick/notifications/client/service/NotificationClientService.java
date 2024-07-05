@@ -80,10 +80,11 @@ public class NotificationClientService {
     }
 
     public void saveCustomer(CustomerDTO customerDTO) {
-        ParameterizedTypeReference<CustomerDTO> responseType = new ParameterizedTypeReference<>() {
+        ParameterizedTypeReference<List<CustomerDTO>> responseType = new ParameterizedTypeReference<>() {
         };
-        HttpEntity<?> requestEntity = new HttpEntity<>(customerDTO);
-        ResponseEntity<CustomerDTO> responseEntity = restTemplate.exchange(
+        HttpEntity<?> requestEntity = new HttpEntity<>(List.of(customerDTO));
+
+        ResponseEntity<List<CustomerDTO>> responseEntity = restTemplate.exchange(
                 String.format("%s/api/customers", notificationServiceUrl),
                 HttpMethod.POST,
                 requestEntity,

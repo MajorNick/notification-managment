@@ -10,6 +10,7 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -31,19 +32,10 @@ public class NotificationService {
         Notification notif = notificationRepo.findById(id).orElseThrow(
                 () -> new NotificationNotFoundException(String.format("notification  with the id: %d not Found", id))
         );
+        notif.setUpdatedAt(LocalDateTime.now());
         notif.setStatus(status);
     }
 
-    public Map<String, Long> getNotificationStatusReport() {
-        var list = notificationRepo.countNotificationsByStatus();
-        Map<String, Long> countMap = new HashMap<>();
-        list.forEach(arr -> {
-            String status = (arr[0]).toString();
-            Long count = ((Number) arr[1]).longValue();
-            countMap.put(status, count);
-        });
-        return countMap;
-    }
 
 
 }

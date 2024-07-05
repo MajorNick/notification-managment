@@ -18,6 +18,8 @@ public class Address {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "address_seq")
     private Long id;
 
+    private boolean isPrimary;
+    @Enumerated(EnumType.STRING)
     private AddressType addressType;
     private String addressValue;
 

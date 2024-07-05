@@ -6,7 +6,9 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.annotation.CreatedDate;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -23,10 +25,16 @@ public class Customer {
     private String fullName;
 
     private String email;
+
     private String phoneNumber;
 
     @Enumerated(EnumType.STRING)
     private NotificationType preferredNotificationType;
+
+    @CreatedDate
+    private LocalDateTime createdAt;
+    @CreatedDate
+    private LocalDateTime updatedAt;
 
     @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
     private List<Address> addresses;

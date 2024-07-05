@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
 import java.time.LocalDateTime;
 
@@ -24,8 +26,10 @@ public class Notification {
     private Status status;
 
     private String content;
-    private LocalDateTime sendTime;
-
+    @CreatedDate
+    private LocalDateTime sentAt;
+    @CreatedDate
+    private LocalDateTime updatedAt;
 
     @ManyToOne
     @JoinColumn(name = "customer_id_fk")
