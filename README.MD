@@ -21,6 +21,6 @@ Main stack: Java 17, SpringBoot3, PostgreSQL, Thymeleaf
 ![Alt text](./ProjectDiagram.png)
 
 I separated the back-end side and front-end side into two different services because it allows for easier maintenance and scalability. Security is implemented using JWT tokens.
-I wanted to use a third-party user data handler like KeyCloak or create my own service for this, but my PC toaster (pc)* said no :D.
+I wanted to use a third-party user data handler like KeyCloak or create my own service for this, but my PC toaster (pc)* said no :D, so I added it with backend service.
 I implemented main back end service api in ui but there are still some missing parts.  
 
