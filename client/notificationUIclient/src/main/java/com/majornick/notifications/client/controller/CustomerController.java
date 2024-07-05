@@ -61,4 +61,15 @@ public class CustomerController {
         clientService.deleteCustomer(id);
         return "redirect:/customers";
     }
+    @GetMapping("/{customerId}/edit")
+    public String redirectToEditCustomer(@PathVariable("customerId") Long customerId,Model model){
+        model.addAttribute("customerDTO",clientService.getCustomer(customerId));
+        return "customers/edit";
+    }
+    @PostMapping("/{customerId}/edit")
+    public String editCustomer(@PathVariable("customerId") Long customerId, @ModelAttribute CustomerDTO customerDTO){
+        clientService.editCustomer(customerId,customerDTO);
+        return "redirect:/customers";
+    }
+
 }

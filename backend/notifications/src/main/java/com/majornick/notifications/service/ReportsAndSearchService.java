@@ -4,6 +4,7 @@ import com.majornick.notifications.domain.Customer;
 import com.majornick.notifications.dto.CustomerDTO;
 import com.majornick.notifications.dto.SearchDTO;
 import com.majornick.notifications.mapper.CustomerMapper;
+import com.majornick.notifications.repository.CustomerRepo;
 import com.majornick.notifications.repository.NotificationRepo;
 import io.micrometer.common.util.StringUtils;
 import jakarta.persistence.EntityManager;
@@ -18,12 +19,13 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class ReportsAndSearchService {
 
-
+    private final CustomerRepo customerRepo;
     private final NotificationRepo notificationRepo;
     private final EntityManager entityManager;
     private final CustomerMapper customerMapper;
@@ -31,14 +33,21 @@ public class ReportsAndSearchService {
 
     public Map<String, Long> getNotificationStatusReport() {
         var list = notificationRepo.countNotificationsByStatus();
-        Map<String, Long> countMap = new HashMap<>();
-        list.forEach(arr -> {
-            String status = (arr[0]).toString();
-            Long count = ((Number) arr[1]).longValue();
-            countMap.put(status, count);
-        });
-        return countMap;
+        return list.stream()
+                .collect(Collectors.toMap(
+                        arr -> arr[0].toString(),
+                        arr -> ((Number) arr[1]).longValue()
+                ));
     }
+    public Map<String,Long> getNotificationPreferencesStats() {
+        var list = customerRepo.countCustomersByNotificationsType();
+        return list.stream()
+                .collect(Collectors.toMap(
+                        arr -> arr[0].toString(),
+                        arr -> ((Number) arr[1]).longValue()
+                ));
+    }
+
 
     public List<CustomerDTO> searchCustomers(SearchDTO searchDTO) {
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
@@ -64,5 +73,6 @@ public class ReportsAndSearchService {
                 .map(customerMapper::toDTO)
                 .toList();
     }
+
 
 }

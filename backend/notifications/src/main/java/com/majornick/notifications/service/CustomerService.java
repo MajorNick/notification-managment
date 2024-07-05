@@ -84,6 +84,9 @@ public class CustomerService {
         if (StringUtils.isNotBlank(customerDTO.getEmail())) {
             customer.setEmail(customerDTO.getEmail());
         }
+        if (customerDTO.getPreferredNotificationType()!= null) {
+            customer.setPreferredNotificationType(customerDTO.getPreferredNotificationType());
+        }
         customer.setUpdatedAt(LocalDateTime.now());
     }
 

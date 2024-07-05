@@ -116,4 +116,24 @@ public class NotificationClientService {
         }
         return responseEntity.getBody();
     }
+
+    public void editCustomer(Long customerId,CustomerDTO customerDTO) {
+        customerDTO.setId(customerId);
+        ParameterizedTypeReference<CustomerDTO> responseType = new ParameterizedTypeReference<>() {
+        };
+        HttpEntity<?> requestEntity = new HttpEntity<>(customerDTO);
+
+        ResponseEntity<CustomerDTO> responseEntity = restTemplate.exchange(
+                String.format("%s/api/customers", notificationServiceUrl),
+                HttpMethod.PUT,
+                requestEntity,
+                responseType
+        );
+        if(responseEntity.getStatusCode().isSameCodeAs(HttpStatusCode.valueOf(401))){
+            throw new UnauthorizedException("Not authorized");
+        }
+        if (responseEntity.getStatusCode().isError()) {
+            throw new RuntimeException("ERROR IN SENDING REQUEST: " + responseEntity.getStatusCode());
+        }
+    }
 }

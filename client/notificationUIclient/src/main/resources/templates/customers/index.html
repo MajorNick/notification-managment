@@ -12,7 +12,6 @@
 <body>
 <main layout:fragment="content">
     <div th:replace="navbar :: navbar"></div>
-
     <div class="container mt-4">
         <h2>Search Customers</h2>
         <form th:object="${searchDTO}" th:action="@{/customers/search}" method="get" class="mb-4">

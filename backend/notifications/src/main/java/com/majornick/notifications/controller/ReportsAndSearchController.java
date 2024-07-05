@@ -22,16 +22,27 @@ import java.util.Map;
 public class ReportsAndSearchController {
     private final ReportsAndSearchService reportsAndSearchService;
 
+    @Operation(summary = "Get report on notification types")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully retrieved type report",
+                    content = { @Content(mediaType = "application/json",
+                            schema = @Schema(implementation = Map.class)) })
+    })
+    @GetMapping("/api/reports/notificationPreferences")
+    public ResponseEntity<?> getNotificationPreferencesStats() {
+        return ResponseEntity.ok(reportsAndSearchService.getNotificationPreferencesStats());
+    }
     @Operation(summary = "Get report on notification statuses")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successfully retrieved status report",
                     content = { @Content(mediaType = "application/json",
                             schema = @Schema(implementation = Map.class)) })
     })
-    @GetMapping("/api/reports/statuses")
+    @GetMapping("/api/reports/notificationStatuses")
     public ResponseEntity<?> getStatusesOfNotifications() {
         return ResponseEntity.ok(reportsAndSearchService.getNotificationStatusReport());
     }
+
 
     @Operation(summary = "Search for customers by fields")
     @ApiResponses(value = {
@@ -43,4 +54,5 @@ public class ReportsAndSearchController {
     public ResponseEntity<?> searchCustomers(@RequestBody SearchDTO searchDTO) {
         return ResponseEntity.ok(reportsAndSearchService.searchCustomers(searchDTO));
     }
+
 }

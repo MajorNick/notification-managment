@@ -37,4 +37,5 @@ public class HomeController {
         authenticationService.authenticate(loginFormDTO, session);
         return "home";
     }
+
 }
